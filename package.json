@@ -3,6 +3,7 @@
   "workspaces": ["frontend"],
   "scripts": {
     "dev:front": "yarn --cwd frontend dev",
-    "dev:back": ""
+    "dev:back": "echo",
+    "dev": "npm-run-all -p dev:*"
   }
 }
