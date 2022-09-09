@@ -1,32 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import React from "react"
+import {GenericDialog} from "components/Dialog"
 import './App.css'
+import { Dialog } from '@headlessui/react';
+import {Button} from "components/Button";
+import logo from "assets/logo.svg";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [openDialogs, setOpenDialogs] = React.useState({
+    editArticle: false,
+    deleteArticle: false
+  });
+
+  //console.log(openDialogs);
+
+  function toggleDialog(key: keyof typeof openDialogs, toggle: boolean){
+    setOpenDialogs(prevState => ({...prevState, [key]: toggle}));
+  }
+  async function onDeleteArticle(){
+    toggleDialog("deleteArticle", false);
+    console.log("delete me");
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <nav className="border-b border-white pb-4 mt-2 mb-4">
+        <ul className="flex">
+          <li>
+            <div className="flex items-baseline">
+              <img src={logo} className="mr-2"/>
+              <p className="self-center">
+                Articles.com
+              </p>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <GenericDialog
+        open={openDialogs.deleteArticle}
+        title="Borrar articulo 1"
+        onClose={()=> toggleDialog("deleteArticle", false)}
+      >
+        <Dialog.Description>¿ Realmente desas borrar el articulo 2 ? No podras deshacer esto.</Dialog.Description>
+
+        <div className="center-h mt-2">
+          <Button
+            styleType="danger"
+            onClick={() => onDeleteArticle()}>
+            Borrar
+          </Button>
+        </div>
+
+
+      </GenericDialog>
+      <Button onClick={() => toggleDialog("deleteArticle", true)} className="">Open Dialog</Button>
     </div>
   )
 }
