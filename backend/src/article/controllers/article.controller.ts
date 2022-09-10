@@ -55,8 +55,6 @@ export class ArticleController {
     type: SwaggerBaseApiResponse(ArticleOutput),
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   async createArticle(
     @ReqContext() ctx: RequestContext,
     @Body() input: CreateArticleInput,
@@ -74,8 +72,6 @@ export class ArticleController {
     type: SwaggerBaseApiResponse([ArticleOutput]),
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   async getArticles(
     @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,
@@ -104,7 +100,6 @@ export class ArticleController {
     type: BaseApiErrorResponse,
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(JwtAuthGuard)
   async getArticle(
     @ReqContext() ctx: RequestContext,
     @Param('id') id: number,
@@ -124,8 +119,6 @@ export class ArticleController {
     type: SwaggerBaseApiResponse(ArticleOutput),
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   async updateArticle(
     @ReqContext() ctx: RequestContext,
     @Param('id') articleId: number,
@@ -147,7 +140,6 @@ export class ArticleController {
     status: HttpStatus.NO_CONTENT,
   })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(JwtAuthGuard)
   async deleteArticle(
     @ReqContext() ctx: RequestContext,
     @Param('id') id: number,
