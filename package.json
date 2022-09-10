@@ -1,6 +1,6 @@
 {
   "private": true,
-  "workspaces": ["frontend"],
+  "workspaces": ["frontend", "backend"],
   "scripts": {
     "dev:front": "yarn --cwd frontend dev",
     "dev:back": "echo",
