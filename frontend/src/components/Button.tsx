@@ -10,6 +10,10 @@ export const BtnStyleTypes = {
 	"danger": {
 		className: "bg-red-700 text-white",
 		style: {}
+	},
+	"secondary": {
+		className: "bg-blue-400 text-white",
+		style: {}
 	}
 }
 

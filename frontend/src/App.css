@@ -9,3 +9,35 @@
    width: 90%;
    margin: 0 auto;
 }
+
+/* Scroll */
+
+.light-scroll {
+   scrollbar-width: thin;
+   scrollbar-color: #dbdbdb #000;
+}
+
+.light-scroll::-webkit-scrollbar {
+   width: 4px;
+}
+
+.without-scroll{
+   scrollbar-width: none;
+}
+
+.without-scroll::-webkit-scrollbar{
+   display: none;
+}
+
+.light-scroll::-webkit-scrollbar-thumb {
+   background-color: #dbdbdb;
+   border-radius: 10px;
+}
+
+/* Sizing */
+.max-h-200{
+   max-height: 800px;
+}
+.h-50{
+   height: 200px;
+}

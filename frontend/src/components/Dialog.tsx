@@ -13,7 +13,7 @@ export type GenericDialogProps = {
 
 export const GenericDialog = (props: GenericDialogProps) => {
 
-  const {onClose, title, open, children, titleClassName} = props;
+  let {onClose, title, open, children, titleClassName = 'max-w-sm' } = props;
 
   return (
     <Dialog
@@ -22,13 +22,13 @@ export const GenericDialog = (props: GenericDialogProps) => {
       className="relative z-50"
     >
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
-      <div className="fixed inset-0 bg-white/5 drop-shadow-lg" aria-hidden="true" />
+      <div className="fixed inset-0 bg-white/5 drop-shadow-lg backdrop-blur-sm bg-black bg-opacity-40" aria-hidden="true" />
       {/* Full-screen scrollable container */}
       <div className="fixed inset-0 overflow-y-auto">
         {/* Full-screen container to center the panel */}
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className={`max-w-sm mx-auto rounded bg-black border-2 border-solid border-white px-10 py-5 rounded-lg ${titleClassName}`}>
-            <Dialog.Title className="text-white text-2xl text-center mb-2">{title}</Dialog.Title>
+          <Dialog.Panel className={`w-full mx-auto bg-black border-2 border-solid border-white px-10 py-5 rounded-lg ${titleClassName}`}>
+            <Dialog.Title className="text-white text-2xl text-center mb-2 w-full">{title}</Dialog.Title>
     {children}
   </Dialog.Panel>
 </div>
