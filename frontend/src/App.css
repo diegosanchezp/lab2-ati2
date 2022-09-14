@@ -41,3 +41,8 @@
 .h-50{
    height: 200px;
 }
+
+pre{
+   max-height: 150px;
+   overflow: hidden;
+}

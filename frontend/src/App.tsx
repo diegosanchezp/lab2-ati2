@@ -2,7 +2,7 @@ import React from "react"
 import {GenericDialog} from "components/Dialog"
 import './App.css'
 import { Dialog } from '@headlessui/react';
-import {Button} from "components/Button";
+import { Button,SubmitButton } from "components/Button";
 import logo from "assets/logo.svg";
 import {PencilIcon, TrashIcon} from "@heroicons/react/24/solid";
 import { getArticlesMethod, deleteArticleMethod, updateArticleMethod } from 'api/repositories/articles'
@@ -19,7 +19,8 @@ function Title(props: {children: React.ReactNode}){
 function App() {
   const [openDialogs, setOpenDialogs] = React.useState({
     editArticle: false,
-    deleteArticle: false
+    deleteArticle: false,
+    addArticle: false
   });
 
   const [articles, setArticles] = React.useState({
@@ -33,7 +34,8 @@ function App() {
   function toggleDialog(key: keyof typeof openDialogs, toggle: boolean){
     setOpenDialogs(prevState => ({...prevState, [key]: toggle}));
   }
-  async function onEditArticle(){
+  async function onEditArticle(e){
+    e.preventDefault();
     await updateArticleMethod(articles.itemIdToEdit, { title: articles.itemTitleToEdit, post: articles.itemPostToEdit })
     getArticles()
     toggleDialog("editArticle", false);
@@ -118,7 +120,7 @@ function App() {
                       </button>
                     </div>
                   </div>
-                  <p>{article.post}</p>
+                  <pre>{article.post}</pre>
                   <div className="center-h">
                     <Button>Mostrar más</Button>
                   </div>
@@ -152,22 +154,22 @@ function App() {
           titleClassName="max-w-3xl"
           onClose={()=> toggleDialog("editArticle", false)}
         >
+          <form onSubmit={onEditArticle}>
           <Dialog.Description>
             <section className="text-white w-full">
-              <input className="w-full rounded-lg bg-black border-white p-2 focus:border-white mb-2" value={articles.itemTitleToEdit} onInput={(event) => onInputItemEditData('itemTitleToEdit', event.target.value)}></input>
-              <textarea className="w-full h-50 rounded-lg bg-black border-white without-scroll p-2 focus:border-white mb-2" value={articles.itemPostToEdit} onInput={(event) => onInputItemEditData('itemPostToEdit', event.target.value)}></textarea>
+              <input required className="w-full rounded-lg bg-black border-white p-2 focus:border-white mb-2" value={articles.itemTitleToEdit} onInput={(event) => onInputItemEditData('itemTitleToEdit', event.target.value)}></input>
+              <textarea required className="w-full h-50 rounded-lg bg-black border-white without-scroll p-2 focus:border-white mb-2" value={articles.itemPostToEdit} onInput={(event) => onInputItemEditData('itemPostToEdit', event.target.value)}></textarea>
             </section>
             
           </Dialog.Description>
 
           <div className="center-h mt-2">
-            <Button
+            <SubmitButton
               styleType="secondary"
-              onClick={() => onEditArticle()}>
-              Guardar articulo
-            </Button>
+              value="Guardar articulo"
+            />
           </div>
-
+          </form>
 
         </GenericDialog>
       </div>
