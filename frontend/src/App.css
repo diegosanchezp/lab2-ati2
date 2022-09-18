@@ -41,8 +41,18 @@
 .h-50{
    height: 200px;
 }
+.h-100{
+   min-height: 50px;
+}
 
 pre{
-   max-height: 150px;
    overflow: hidden;
+}
+
+.new-article-box{
+   border-radius: 10px;
+   border-color: white;
+   border:solid;
+   padding: 20px;
+   border-width: 1px;
 }

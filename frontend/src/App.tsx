@@ -5,7 +5,7 @@ import { Dialog } from '@headlessui/react';
 import { Button,SubmitButton } from "components/Button";
 import logo from "assets/logo.svg";
 import {PencilIcon, TrashIcon} from "@heroicons/react/24/solid";
-import { getArticlesMethod, deleteArticleMethod, updateArticleMethod } from 'api/repositories/articles'
+import { getArticlesMethod, createArticleMethod, deleteArticleMethod, updateArticleMethod } from 'api/repositories/articles'
 
 function Title(props: {children: React.ReactNode}){
   const {children} = props;
@@ -28,13 +28,25 @@ function App() {
     itemIdToDelete: -1,
     itemIdToEdit: -1,
     itemTitleToEdit: '',
-    itemPostToEdit: ''
+    itemPostToEdit: '',
+    itemTitleToAdd: '',
+    itemPostToAdd: '',
+    articleReading: 0
   });
 
   function toggleDialog(key: keyof typeof openDialogs, toggle: boolean){
     setOpenDialogs(prevState => ({...prevState, [key]: toggle}));
   }
-  async function onEditArticle(e){
+  
+  async function onAddArticle(e: any){
+    e.preventDefault();
+    await createArticleMethod({ title: articles.itemTitleToAdd, post: articles.itemPostToAdd })
+    setArticles(prevState => ({...prevState, itemTitleToAdd: '',itemPostToAdd: ''}))
+    getArticles()
+    toggleDialog("editArticle", false);
+  }
+
+  async function onEditArticle(e: any){
     e.preventDefault();
     await updateArticleMethod(articles.itemIdToEdit, { title: articles.itemTitleToEdit, post: articles.itemPostToEdit })
     getArticles()
@@ -71,6 +83,13 @@ function App() {
     toggleDialog("editArticle", true)
   } 
 
+  function toggleArticleReadin(_id: number){
+    setArticles(prevState => ({
+      ...prevState, 
+      articleReading: _id === prevState.articleReading ? 0 : _id
+    }))
+  }
+
   function onInputItemEditData(key: string, _value: string){
     setArticles((prevState) => ({...prevState, [key]: _value}))
   }
@@ -97,8 +116,20 @@ function App() {
           </ul>
         </nav>
 
-        <section className="my-2">
-          <Title>Crear articulo</Title>
+        <section className="my-2 new-article-box">
+          <form onSubmit={onAddArticle}>
+            <section className="text-white w-full">
+              <input placeholder="Ingrese título" required className="w-full rounded-lg bg-black border-white p-2 focus:border-white mb-2" value={articles.itemTitleToAdd} onInput={(event) => onInputItemEditData('itemTitleToAdd', event.target.value)}></input>
+              <textarea placeholder="Ingresar texto del artículo" required className="w-full h-100 rounded-lg bg-black border-white without-scroll p-2 focus:border-white mb-2" value={articles.itemPostToAdd} onInput={(event) => onInputItemEditData('itemPostToAdd', event.target.value)}></textarea>
+            </section>
+            
+          <div className="center-h mt-2">
+            <SubmitButton
+              styleType="secondary"
+              value="Crear articulo"
+            />
+          </div>
+          </form>
         </section>
         <section className="flex flex-col gap-y-4">
           <Title>Articulos</Title>
@@ -120,9 +151,21 @@ function App() {
                       </button>
                     </div>
                   </div>
-                  <pre>{article.post}</pre>
+                  <pre
+                    style={{
+                      maxHeight: article.id === articles.articleReading ? 'none' : 150
+                    }}
+                  >{article.post}</pre>
                   <div className="center-h">
-                    <Button>Mostrar más</Button>
+                    <Button
+                      onClick={() => toggleArticleReadin(article.id)}
+                    >
+                      {
+                        article.id === articles.articleReading ?
+                        'Mostrar menos':
+                        'Mostrar más'
+                      }
+                    </Button>
                   </div>
                 </article>
               </div>
