@@ -1,0 +1,10 @@
+{
+  "brand": "Articulos.com",
+  "formTitlePlaceHolder": "Ingrese título",
+  "formAtextPlaceHolder": "Ingresar texto del artículo",
+  "createArticleBtn": "Crear articulo",
+  "saveArticle": "Guardar artículo",
+  "showMoreBtn": "Mostrar más",
+  "showLessBtn": "Mostrar menos",
+  "editArticle": "Editar articulo"
+}

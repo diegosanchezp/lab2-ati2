@@ -1,11 +1,27 @@
 import React from "react"
 import {GenericDialog} from "components/Dialog"
 import './App.css'
-import { Dialog } from '@headlessui/react';
+// Translations
+import './i18n/config';
+import { useTranslation } from 'react-i18next';
+
+import { Dialog, Listbox, Transition } from '@headlessui/react';
 import { Button,SubmitButton } from "components/Button";
 import logo from "assets/logo.svg";
 import {PencilIcon, TrashIcon} from "@heroicons/react/24/solid";
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+
 import { getArticlesMethod, createArticleMethod, deleteArticleMethod, updateArticleMethod } from 'api/repositories/articles'
+
+type langItem = {
+    nativeName: string
+    code: string
+}
+
+const langList: langItem[] = [
+  {nativeName: 'English', code: 'en'},
+  {nativeName: 'Español', code: 'es'},
+]
 
 function Title(props: {children: React.ReactNode}){
   const {children} = props;
@@ -17,6 +33,9 @@ function Title(props: {children: React.ReactNode}){
 }
 
 function App() {
+  const { t, i18n } = useTranslation();
+  const [selected, setSelected] = React.useState(langList[0])
+
   const [openDialogs, setOpenDialogs] = React.useState({
     editArticle: false,
     deleteArticle: false,
@@ -34,6 +53,10 @@ function App() {
     articleReading: 0
   });
 
+  function changeLang(lang: langItem){
+    i18n.changeLanguage(lang.code);
+    setSelected(lang)
+  }
   function toggleDialog(key: keyof typeof openDialogs, toggle: boolean){
     setOpenDialogs(prevState => ({...prevState, [key]: toggle}));
   }
@@ -104,14 +127,66 @@ function App() {
     <main className="pb-10">
       <div className="App">
         <nav className="border-b border-white pb-4 mt-2 mb-4">
-          <ul className="flex">
+          <ul className="flex justify-between">
             <li>
               <div className="flex items-baseline">
                 <img src={logo} className="mr-2"/>
                 <p className="self-center">
-                  Articles.com
+                  {t('brand')}
                 </p>
               </div>
+            </li>
+            <li>
+              <Listbox value={selected} onChange={changeLang}>
+                <div className="relative mt-1">
+                  <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                    <span className="block truncate text-black">{selected.nativeName}</span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    as={React.Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {langList.map((lang, langIdx) => (
+                        <Listbox.Option
+                          key={langIdx}
+                          className={({ active }) =>
+                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                          active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+                        }`
+                        }
+                        value={lang}
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span
+                              className={`block truncate ${
+                                selected ? 'font-medium' : 'font-normal'
+                              }`}
+                            >
+                              {lang.nativeName}
+                            </span>
+                          {selected ? (
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                              <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          ) : null}
+                        </>
+                    )}
+                  </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
             </li>
           </ul>
         </nav>
@@ -119,14 +194,14 @@ function App() {
         <section className="my-2 new-article-box">
           <form onSubmit={onAddArticle}>
             <section className="text-white w-full">
-              <input placeholder="Ingrese título" required className="w-full rounded-lg bg-black border-white p-2 focus:border-white mb-2" value={articles.itemTitleToAdd} onInput={(event) => onInputItemEditData('itemTitleToAdd', event.target.value)}></input>
-              <textarea placeholder="Ingresar texto del artículo" required className="w-full h-100 rounded-lg bg-black border-white without-scroll p-2 focus:border-white mb-2" value={articles.itemPostToAdd} onInput={(event) => onInputItemEditData('itemPostToAdd', event.target.value)}></textarea>
+              <input placeholder={t('formTitlePlaceHolder')} required className="w-full rounded-lg bg-black border-white p-2 focus:border-white mb-2" value={articles.itemTitleToAdd} onInput={(event) => onInputItemEditData('itemTitleToAdd', event.target.value)}></input>
+              <textarea placeholder={t("formAtextPlaceHolder")} required className="w-full h-100 rounded-lg bg-black border-white without-scroll p-2 focus:border-white mb-2" value={articles.itemPostToAdd} onInput={(event) => onInputItemEditData('itemPostToAdd', event.target.value)}></textarea>
             </section>
             
           <div className="center-h mt-2">
             <SubmitButton
               styleType="secondary"
-              value="Crear articulo"
+              value={t("createArticleBtn")}
             />
           </div>
           </form>
@@ -162,8 +237,8 @@ function App() {
                     >
                       {
                         article.id === articles.articleReading ?
-                        'Mostrar menos':
-                        'Mostrar más'
+                        t('showLessBtn'):
+                        t('showMoreBtn')
                       }
                     </Button>
                   </div>
@@ -193,7 +268,7 @@ function App() {
 
         <GenericDialog
           open={openDialogs.editArticle}
-          title="Editar articulo "
+          title={t("editArticle")}
           titleClassName="max-w-3xl"
           onClose={()=> toggleDialog("editArticle", false)}
         >
@@ -209,7 +284,7 @@ function App() {
           <div className="center-h mt-2">
             <SubmitButton
               styleType="secondary"
-              value="Guardar articulo"
+              value={t("saveArticle")}
             />
           </div>
           </form>

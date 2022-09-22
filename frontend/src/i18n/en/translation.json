@@ -1,0 +1,10 @@
+{
+  "brand": "Articles.com",
+  "formTitlePlaceHolder": "Insert a title",
+  "formAtextPlaceHolder": "Insert the article content",
+  "createArticleBtn": "Create article",
+  "saveArticle": "Save article",
+  "showMoreBtn": "Show more",
+  "showLessBtn": "Show less",
+  "editArticle": "Edit article"
+}
