@@ -3,8 +3,7 @@ import { API_URL } from "config";
 export const clientBase = async (
   endpoint: string,
   method: string,
-  { body, customConfig }: any = {},
-  handlerSession = true
+  { body, customConfig }: any = {}
 ) => {
   const headers: { [key: string]: string } = {
     "content-type": "application/json",

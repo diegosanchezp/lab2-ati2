@@ -27,7 +27,7 @@ export const GenericDialog = (props: GenericDialogProps) => {
       <div className="fixed inset-0 overflow-y-auto">
         {/* Full-screen container to center the panel */}
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className={`w-full mx-auto bg-black border-2 border-solid border-white px-10 py-5 rounded-lg ${titleClassName}`}>
+          <Dialog.Panel className={`w-full mx-auto text-center bg-black border-2 border-solid border-white px-10 py-5 rounded-lg ${titleClassName}`}>
             <Dialog.Title className="text-white text-2xl text-center mb-2 w-full">{title}</Dialog.Title>
     {children}
   </Dialog.Panel>

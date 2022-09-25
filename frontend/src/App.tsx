@@ -46,6 +46,7 @@ function App() {
     list: [],
     itemIdToDelete: -1,
     itemIdToEdit: -1,
+    itemTitleToDelete: '',
     itemTitleToEdit: '',
     itemPostToEdit: '',
     itemTitleToAdd: '',
@@ -75,11 +76,13 @@ function App() {
     getArticles()
     toggleDialog("editArticle", false);
   }
+
   async function onDeleteArticle(){
     await deleteArticleMethod(articles.itemIdToDelete)
     getArticles()
     toggleDialog("deleteArticle", false);
   }
+
   async function getArticles() {
     const { data, error } = await getArticlesMethod()
     if(data){
@@ -92,6 +95,10 @@ function App() {
   }
 
   function openDeleteDialog(_id: number){
+    const articleToDelete = articles.list.find((article) => article.id = _id)
+    if(!articleToDelete) return
+
+    setArticles((prevState) => ({...prevState, itemTitleToDelete: articleToDelete.title }))
     setArticles((prevState) => ({...prevState, itemIdToDelete: _id}))
     toggleDialog("deleteArticle", true)
   } 
@@ -207,53 +214,63 @@ function App() {
           </form>
         </section>
         <section className="flex flex-col gap-y-4">
-          <Title>Articulos</Title>
+          <Title>{t('articles')}</Title>
+
           <section className="overflow-y-auto light-scroll max-h-200">
-            {articles.list.map((article, index) => 
-              <div className="articleSection" key={article.id}>
-                <article className="flex flex-col py-2 px-5 border-2 border-white border-solid rounded-md my-2">
-                  <div className="flex mb-2 justify-between">
-                    <header className="text-xl">{article.title}</header>
-                    <div className="flex gap-2">
-                      <button onClick={() => openEditDialog(article.id)}>
-                        <PencilIcon className={`${iconStyle}`}/>
-                      </button>
-                      <button
-                          onClick={() => openDeleteDialog(article.id)}
-                      >
-                        <TrashIcon
-                          className={`${iconStyle}`}/>
-                      </button>
+            {
+               articles.list.length > 0 ? (
+                articles.list.map((article, index) => 
+                <div className="articleSection" key={article.id}>
+                  <article className="flex flex-col py-2 px-5 border-2 border-white border-solid rounded-md my-2">
+                    <div className="flex mb-2 justify-between">
+                      <header className="text-xl">{article.title}</header>
+                      <div className="flex gap-2">
+                        <button onClick={() => openEditDialog(article.id)}>
+                          <PencilIcon className={`${iconStyle}`}/>
+                        </button>
+                        <button
+                            onClick={() => openDeleteDialog(article.id)}
+                        >
+                          <TrashIcon
+                            className={`${iconStyle}`}/>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <pre
-                    style={{
-                      maxHeight: article.id === articles.articleReading ? 'none' : 150
-                    }}
-                  >{article.post}</pre>
-                  <div className="center-h">
-                    <Button
-                      onClick={() => toggleArticleReadin(article.id)}
-                    >
-                      {
-                        article.id === articles.articleReading ?
-                        t('showLessBtn'):
-                        t('showMoreBtn')
-                      }
-                    </Button>
-                  </div>
-                </article>
-              </div>
-          )}
+                    <p
+                      style={{
+                        maxHeight: article.id === articles.articleReading ? 'none' : 75,
+                        overflow: article.id === articles.articleReading ? 'auto' : 'hidden'
+                      }}
+                    >{article.post}</p>
+                    <div className="center-h">
+                      <Button
+                        onClick={() => toggleArticleReadin(article.id)}
+                      >
+                        {
+                          article.id === articles.articleReading ?
+                          t('showLessBtn'):
+                          t('showMoreBtn')
+                        }
+                      </Button>
+                    </div>
+                  </article>
+                </div>   
+                )) : (
+                  <section className="flex justify-center items-center">
+                    <p className="text-lg">{t('thereAreNoArticles')}</p>
+                  </section>
+                )
+            }
           </section>
+
         </section>
 
         <GenericDialog
           open={openDialogs.deleteArticle}
-          title="Borrar articulo 1"
+          title={t('deleteArticle').replace(':name', articles.itemTitleToDelete)}
           onClose={()=> toggleDialog("deleteArticle", false)}
         >
-          <Dialog.Description>¿ Realmente desas borrar el articulo 2 ? No podras deshacer esto.</Dialog.Description>
+          <Dialog.Description>{t('deleteArticleConfirmation').replace(':name', articles.itemTitleToDelete)}</Dialog.Description>
 
           <div className="center-h mt-2">
             <Button

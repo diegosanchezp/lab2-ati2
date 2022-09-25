@@ -1,4 +1,5 @@
 {
+  "articles": "Artículos",
   "brand": "Articulos.com",
   "formTitlePlaceHolder": "Ingrese título",
   "formAtextPlaceHolder": "Ingresar texto del artículo",
@@ -6,5 +7,8 @@
   "saveArticle": "Guardar artículo",
   "showMoreBtn": "Mostrar más",
   "showLessBtn": "Mostrar menos",
-  "editArticle": "Editar articulo"
+  "editArticle": "Editar articulo",
+  "deleteArticle": "Borrar arctículo :name",
+  "deleteArticleConfirmation": "¿Estás seguro de borrar el articulo :name? No podrás deshacer esta acción.",
+  "thereAreNoArticles": "No hay artículos creados aún. Intenta crear uno en la sección de arriba."
 }
