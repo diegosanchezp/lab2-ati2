@@ -9,6 +9,6 @@
   "showLessBtn": "Show less",
   "editArticle": "Edit article",
   "deleteArticle": "Delete article :name",
-  "deleteArticleConfirmation": "Are you sure about deleting the article :name? You couln't ondo this action.",
+  "deleteArticleConfirmation": "Are you sure about deleting the article :name? You couldn't undo this action.",
   "thereAreNoArticles": "No articles created yet. Try to create one on the section above."
 }
